@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "myfs.h": "c",
+        "cmath": "c"
+    }
+}

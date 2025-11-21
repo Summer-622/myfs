@@ -1,0 +1,3 @@
+/home/ys/user-land-filesystem/fs/myfs/build/CMakeFiles/myfs.dir
+/home/ys/user-land-filesystem/fs/myfs/build/CMakeFiles/edit_cache.dir
+/home/ys/user-land-filesystem/fs/myfs/build/CMakeFiles/rebuild_cache.dir
