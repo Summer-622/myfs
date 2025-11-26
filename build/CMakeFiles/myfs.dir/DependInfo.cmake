@@ -8,7 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/ys/user-land-filesystem/fs/myfs/src/myfs.c" "CMakeFiles/myfs.dir/src/myfs.c.o" "gcc" "CMakeFiles/myfs.dir/src/myfs.c.o.d"
+  "/home/ys/user-land-filesystem/fs/myfs/src/myfs.cpp" "CMakeFiles/myfs.dir/src/myfs.cpp.o" "gcc" "CMakeFiles/myfs.dir/src/myfs.cpp.o.d"
+  "/home/ys/user-land-filesystem/fs/myfs/src/utils.cpp" "CMakeFiles/myfs.dir/src/utils.cpp.o" "gcc" "CMakeFiles/myfs.dir/src/utils.cpp.o.d"
   )
 
 # Targets to which this target links.

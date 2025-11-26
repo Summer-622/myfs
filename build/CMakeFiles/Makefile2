@@ -81,12 +81,12 @@ clean: CMakeFiles/myfs.dir/clean
 CMakeFiles/myfs.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myfs.dir/build.make CMakeFiles/myfs.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myfs.dir/build.make CMakeFiles/myfs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ys/user-land-filesystem/fs/myfs/build/CMakeFiles --progress-num=1,2 "Built target myfs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ys/user-land-filesystem/fs/myfs/build/CMakeFiles --progress-num=1,2,3 "Built target myfs"
 .PHONY : CMakeFiles/myfs.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/myfs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ys/user-land-filesystem/fs/myfs/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ys/user-land-filesystem/fs/myfs/build/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/myfs.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ys/user-land-filesystem/fs/myfs/build/CMakeFiles 0
 .PHONY : CMakeFiles/myfs.dir/rule

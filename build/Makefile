@@ -129,29 +129,53 @@ myfs/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myfs.dir/build.make CMakeFiles/myfs.dir/build
 .PHONY : myfs/fast
 
-src/myfs.o: src/myfs.c.o
+src/myfs.o: src/myfs.cpp.o
 .PHONY : src/myfs.o
 
 # target to build an object file
-src/myfs.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myfs.dir/build.make CMakeFiles/myfs.dir/src/myfs.c.o
-.PHONY : src/myfs.c.o
+src/myfs.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myfs.dir/build.make CMakeFiles/myfs.dir/src/myfs.cpp.o
+.PHONY : src/myfs.cpp.o
 
-src/myfs.i: src/myfs.c.i
+src/myfs.i: src/myfs.cpp.i
 .PHONY : src/myfs.i
 
 # target to preprocess a source file
-src/myfs.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myfs.dir/build.make CMakeFiles/myfs.dir/src/myfs.c.i
-.PHONY : src/myfs.c.i
+src/myfs.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myfs.dir/build.make CMakeFiles/myfs.dir/src/myfs.cpp.i
+.PHONY : src/myfs.cpp.i
 
-src/myfs.s: src/myfs.c.s
+src/myfs.s: src/myfs.cpp.s
 .PHONY : src/myfs.s
 
 # target to generate assembly for a file
-src/myfs.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myfs.dir/build.make CMakeFiles/myfs.dir/src/myfs.c.s
-.PHONY : src/myfs.c.s
+src/myfs.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myfs.dir/build.make CMakeFiles/myfs.dir/src/myfs.cpp.s
+.PHONY : src/myfs.cpp.s
+
+src/utils.o: src/utils.cpp.o
+.PHONY : src/utils.o
+
+# target to build an object file
+src/utils.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myfs.dir/build.make CMakeFiles/myfs.dir/src/utils.cpp.o
+.PHONY : src/utils.cpp.o
+
+src/utils.i: src/utils.cpp.i
+.PHONY : src/utils.i
+
+# target to preprocess a source file
+src/utils.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myfs.dir/build.make CMakeFiles/myfs.dir/src/utils.cpp.i
+.PHONY : src/utils.cpp.i
+
+src/utils.s: src/utils.cpp.s
+.PHONY : src/utils.s
+
+# target to generate assembly for a file
+src/utils.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myfs.dir/build.make CMakeFiles/myfs.dir/src/utils.cpp.s
+.PHONY : src/utils.cpp.s
 
 # Help Target
 help:
@@ -165,6 +189,9 @@ help:
 	@echo "... src/myfs.o"
 	@echo "... src/myfs.i"
 	@echo "... src/myfs.s"
+	@echo "... src/utils.o"
+	@echo "... src/utils.i"
+	@echo "... src/utils.s"
 .PHONY : help
 
 

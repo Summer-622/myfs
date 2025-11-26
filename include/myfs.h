@@ -9,12 +9,13 @@
 #include "string.h"
 #include "fuse.h"
 #include <stddef.h>
-#include "ddriver.h"
+extern "C" {
+    #include "ddriver.h"
+}
 #include "errno.h"
 #include "types.h"
 #include "stdint.h"
 
-#define MYFS_MAGIC                  /* TODO: Define by yourself */
 #define MYFS_DEFAULT_PERM    0777   /* 全权限打开 */
 
 /******************************************************************************

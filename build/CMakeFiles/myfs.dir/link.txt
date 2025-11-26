@@ -1,1 +1,1 @@
-/usr/bin/gcc  -D_FILE_OFFSET_BITS=64 -no-pie -g -Wall --pedantic -g -rdynamic CMakeFiles/myfs.dir/src/myfs.c.o -o myfs  -lfuse /home/ys/lib/libddriver.a 
+/usr/bin/g++  -D_FILE_OFFSET_BITS=64 -no-pie -g -Wall --pedantic -g -rdynamic CMakeFiles/myfs.dir/src/myfs.cpp.o CMakeFiles/myfs.dir/src/utils.cpp.o -o myfs  -lfuse /home/ys/lib/libddriver.a 

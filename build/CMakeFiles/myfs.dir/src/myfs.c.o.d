@@ -82,4 +82,6 @@ CMakeFiles/myfs.dir/src/myfs.c.o: \
  /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
  /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /home/ys/user-land-filesystem/fs/myfs/./include/types.h
+ /home/ys/user-land-filesystem/fs/myfs/./include/types.h \
+ /home/ys/user-land-filesystem/fs/myfs/./include/utils.h \
+ /home/ys/user-land-filesystem/fs/myfs/./include/myfs.h

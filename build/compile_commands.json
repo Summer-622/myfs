@@ -1,7 +1,12 @@
 [
 {
   "directory": "/home/ys/user-land-filesystem/fs/myfs/build",
-  "command": "/usr/bin/gcc  -I/home/ys/user-land-filesystem/fs/myfs/./include  -D_FILE_OFFSET_BITS=64 -no-pie -g -Wall --pedantic -g -o CMakeFiles/myfs.dir/src/myfs.c.o -c /home/ys/user-land-filesystem/fs/myfs/src/myfs.c",
-  "file": "/home/ys/user-land-filesystem/fs/myfs/src/myfs.c"
+  "command": "/usr/bin/g++  -I/home/ys/user-land-filesystem/fs/myfs/./include  -D_FILE_OFFSET_BITS=64 -no-pie -g -Wall --pedantic -g -std=gnu++17 -o CMakeFiles/myfs.dir/src/myfs.cpp.o -c /home/ys/user-land-filesystem/fs/myfs/src/myfs.cpp",
+  "file": "/home/ys/user-land-filesystem/fs/myfs/src/myfs.cpp"
+},
+{
+  "directory": "/home/ys/user-land-filesystem/fs/myfs/build",
+  "command": "/usr/bin/g++  -I/home/ys/user-land-filesystem/fs/myfs/./include  -D_FILE_OFFSET_BITS=64 -no-pie -g -Wall --pedantic -g -std=gnu++17 -o CMakeFiles/myfs.dir/src/utils.cpp.o -c /home/ys/user-land-filesystem/fs/myfs/src/utils.cpp",
+  "file": "/home/ys/user-land-filesystem/fs/myfs/src/utils.cpp"
 }
 ]

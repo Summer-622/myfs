@@ -69,33 +69,49 @@ include CMakeFiles/myfs.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/myfs.dir/flags.make
 
-CMakeFiles/myfs.dir/src/myfs.c.o: CMakeFiles/myfs.dir/flags.make
-CMakeFiles/myfs.dir/src/myfs.c.o: ../src/myfs.c
-CMakeFiles/myfs.dir/src/myfs.c.o: CMakeFiles/myfs.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ys/user-land-filesystem/fs/myfs/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/myfs.dir/src/myfs.c.o"
-	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/myfs.dir/src/myfs.c.o -MF CMakeFiles/myfs.dir/src/myfs.c.o.d -o CMakeFiles/myfs.dir/src/myfs.c.o -c /home/ys/user-land-filesystem/fs/myfs/src/myfs.c
+CMakeFiles/myfs.dir/src/myfs.cpp.o: CMakeFiles/myfs.dir/flags.make
+CMakeFiles/myfs.dir/src/myfs.cpp.o: ../src/myfs.cpp
+CMakeFiles/myfs.dir/src/myfs.cpp.o: CMakeFiles/myfs.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ys/user-land-filesystem/fs/myfs/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/myfs.dir/src/myfs.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myfs.dir/src/myfs.cpp.o -MF CMakeFiles/myfs.dir/src/myfs.cpp.o.d -o CMakeFiles/myfs.dir/src/myfs.cpp.o -c /home/ys/user-land-filesystem/fs/myfs/src/myfs.cpp
 
-CMakeFiles/myfs.dir/src/myfs.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/myfs.dir/src/myfs.c.i"
-	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ys/user-land-filesystem/fs/myfs/src/myfs.c > CMakeFiles/myfs.dir/src/myfs.c.i
+CMakeFiles/myfs.dir/src/myfs.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myfs.dir/src/myfs.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ys/user-land-filesystem/fs/myfs/src/myfs.cpp > CMakeFiles/myfs.dir/src/myfs.cpp.i
 
-CMakeFiles/myfs.dir/src/myfs.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/myfs.dir/src/myfs.c.s"
-	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ys/user-land-filesystem/fs/myfs/src/myfs.c -o CMakeFiles/myfs.dir/src/myfs.c.s
+CMakeFiles/myfs.dir/src/myfs.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myfs.dir/src/myfs.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ys/user-land-filesystem/fs/myfs/src/myfs.cpp -o CMakeFiles/myfs.dir/src/myfs.cpp.s
+
+CMakeFiles/myfs.dir/src/utils.cpp.o: CMakeFiles/myfs.dir/flags.make
+CMakeFiles/myfs.dir/src/utils.cpp.o: ../src/utils.cpp
+CMakeFiles/myfs.dir/src/utils.cpp.o: CMakeFiles/myfs.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ys/user-land-filesystem/fs/myfs/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/myfs.dir/src/utils.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myfs.dir/src/utils.cpp.o -MF CMakeFiles/myfs.dir/src/utils.cpp.o.d -o CMakeFiles/myfs.dir/src/utils.cpp.o -c /home/ys/user-land-filesystem/fs/myfs/src/utils.cpp
+
+CMakeFiles/myfs.dir/src/utils.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myfs.dir/src/utils.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ys/user-land-filesystem/fs/myfs/src/utils.cpp > CMakeFiles/myfs.dir/src/utils.cpp.i
+
+CMakeFiles/myfs.dir/src/utils.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myfs.dir/src/utils.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ys/user-land-filesystem/fs/myfs/src/utils.cpp -o CMakeFiles/myfs.dir/src/utils.cpp.s
 
 # Object files for target myfs
 myfs_OBJECTS = \
-"CMakeFiles/myfs.dir/src/myfs.c.o"
+"CMakeFiles/myfs.dir/src/myfs.cpp.o" \
+"CMakeFiles/myfs.dir/src/utils.cpp.o"
 
 # External object files for target myfs
 myfs_EXTERNAL_OBJECTS =
 
-myfs: CMakeFiles/myfs.dir/src/myfs.c.o
+myfs: CMakeFiles/myfs.dir/src/myfs.cpp.o
+myfs: CMakeFiles/myfs.dir/src/utils.cpp.o
 myfs: CMakeFiles/myfs.dir/build.make
 myfs: /usr/lib/x86_64-linux-gnu/libfuse.so
 myfs: /home/ys/lib/libddriver.a
 myfs: CMakeFiles/myfs.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ys/user-land-filesystem/fs/myfs/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable myfs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ys/user-land-filesystem/fs/myfs/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable myfs"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/myfs.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
