@@ -6,7 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <cstddef>
-#include <sstream> // 新增，用于路径解析
+#include <sstream> 
 
 extern "C" {
     #include "ddriver.h"
@@ -495,9 +495,72 @@ void FileSystem::umount() {
     delete[] super.map_data;
 }
 
+void FileSystem::clear_bit(uint8_t* map, int index) {
+    int byte_idx = index / 8;
+    int bit_idx = index % 8;
+    map[byte_idx] &= ~(1 << bit_idx);
+}
 
+void FileSystem::free_data_block(int blk_no) {
+    // 检查块号是否合法
+    if (blk_no < super.data_start || blk_no >= super.total_blocks) return;
+    
+    int data_idx = blk_no - super.data_start;
+    
+    // 清除位图
+    clear_bit(super.map_data, data_idx);
+    driver_write(super.dbmap_start * MYFS_BLK_SIZE, super.map_data, MYFS_BLK_SIZE);
+}
+
+void FileSystem::release_inode(myfs_inode* inode) {
+    if (!inode) return;
+
+    //释放该 inode 占用的所有数据块
+    for (int i = 0; i < MYFS_DIRECT_BLOCKS; i++) {
+        if (inode->block[i] != 0) {
+            free_data_block(inode->block[i]);
+            inode->block[i] = 0;
+        }
+    }
+
+    //释放 inode 位图
+    clear_bit(super.map_inode, inode->ino);
+    driver_write(super.ibmap_start * MYFS_BLK_SIZE, super.map_inode, MYFS_BLK_SIZE);
+
+    //释放内存对象
+    delete inode; 
+}
+
+int FileSystem::delete_dentry(myfs_inode* parent, myfs_dentry* child) {
+    if (!parent || !child) return -1;
+    
+    myfs_dentry *curr = parent->first_child;
+    myfs_dentry *prev = nullptr;
+    
+    while (curr) {
+        if (curr == child) {
+            // 从链表中移除
+            if (prev) {
+                prev->brother = curr->brother;
+            } else {
+                parent->first_child = curr->brother;
+            }
+            
+            // 更新父目录大小（逻辑大小）
+            // 物理数据块的整理在 sync_inode 中会重新根据链表生成，所以这里只需减小 size
+            if (parent->size >= sizeof(struct myfs_dentry_d))
+                parent->size -= sizeof(struct myfs_dentry_d);
+            
+            delete curr; // 释放 dentry 内存
+            return 0;
+        }
+        prev = curr;
+        curr = curr->brother;
+    }
+    return -1;
+}
 // =================================================================
-// FUSE 接口 (保持不变)
+// FUSE 接口 
 // =================================================================
 
 int FileSystem::fuse_mkdir(const char* path, mode_t mode) {
@@ -700,5 +763,174 @@ int FileSystem::fuse_readdir(const char * path, void * buf, fuse_fill_dir_t fill
         child = child->brother;
     }
 	
+    return 0;
+}
+
+int FileSystem::fuse_access(const char* path, int mask) {
+    bool is_find, is_root;
+    std::string s_path(path);
+    myfs_dentry* dentry = lookup(s_path, &is_find, &is_root);
+    
+    if (!is_find || !dentry) {
+        return -MYFS_ERROR_NOTFOUND;
+    }
+    return 0;
+}
+
+int FileSystem::fuse_open(const char* path, struct fuse_file_info* fi) {
+    bool is_find, is_root;
+    std::string s_path(path);
+    myfs_dentry* dentry = lookup(s_path, &is_find, &is_root);
+    
+    if (!is_find || !dentry) {
+        return -MYFS_ERROR_NOTFOUND;
+    }
+    return 0;
+}
+
+int FileSystem::fuse_opendir(const char* path, struct fuse_file_info* fi) {
+    bool is_find, is_root;
+    std::string s_path(path);
+    myfs_dentry* dentry = lookup(s_path, &is_find, &is_root);
+    
+    if (!is_find || !dentry) {
+        return -MYFS_ERROR_NOTFOUND;
+    }
+    if (!dentry->inode) {
+        dentry->inode = read_inode(dentry->ino);
+    }
+    if (!MYFS_IS_DIR(dentry->inode)) {
+        return -MYFS_ERROR_INVAL; 
+    }
+    return 0;
+}
+
+int FileSystem::fuse_truncate(const char* path, off_t size) {
+    bool is_find, is_root;
+    std::string s_path(path);
+    myfs_dentry* dentry = lookup(s_path, &is_find, &is_root);
+    if (!is_find || !dentry || !dentry->inode) return -MYFS_ERROR_NOTFOUND;
+    
+    myfs_inode *inode = dentry->inode;
+    
+    // 如果是缩小文件，需要释放多余的块
+    if (size < inode->size) {
+        int old_end_blk = (inode->size + MYFS_BLK_SIZE - 1) / MYFS_BLK_SIZE - 1;
+        int new_end_blk = (size + MYFS_BLK_SIZE - 1) / MYFS_BLK_SIZE - 1;
+        
+        // 从后往前释放不再需要的块
+        for (int i = old_end_blk; i > new_end_blk; i--) {
+            if (inode->block[i] != 0) {
+                free_data_block(inode->block[i]);
+                inode->block[i] = 0;
+            }
+        }
+    }
+    
+    inode->size = size;
+    inode->mtime = time(NULL);
+    sync_inode(inode);
+    return 0;
+}
+
+int FileSystem::fuse_unlink(const char* path) {
+    bool is_find, is_root;
+    std::string s_path(path);
+    myfs_dentry* dentry = lookup(s_path, &is_find, &is_root);
+    
+    if (!is_find || !dentry || !dentry->inode) return -MYFS_ERROR_NOTFOUND;
+    if (MYFS_IS_DIR(dentry->inode)) return -MYFS_ERROR_ISDIR;
+    
+    myfs_dentry* parent = dentry->parent;
+    if (!parent || !parent->inode) return -MYFS_ERROR_IO;
+    
+    //释放 Inode 及其数据块
+    release_inode(dentry->inode);
+    dentry->inode = nullptr; //避免悬空
+    
+    //从父目录中移除 dentry
+    delete_dentry(parent->inode, dentry);
+    
+    //同步父目录 (写入磁盘)
+    parent->inode->mtime = time(NULL);
+    sync_inode(parent->inode);
+    
+    return 0;
+}
+
+int FileSystem::fuse_rmdir(const char* path) {
+    bool is_find, is_root;
+    std::string s_path(path);
+    myfs_dentry* dentry = lookup(s_path, &is_find, &is_root);
+    
+    if (!is_find || !dentry || !dentry->inode) return -MYFS_ERROR_NOTFOUND;
+    if (!MYFS_IS_DIR(dentry->inode)) return -MYFS_ERROR_INVAL; 
+    
+    //检查目录是否为空 (如果有子项，first_child 不为空)
+    if (dentry->inode->first_child != nullptr) {
+        return -MYFS_ERROR_ACCESS; // Directory not empty
+    }
+    
+    myfs_dentry* parent = dentry->parent;
+    if (!parent || !parent->inode) return -MYFS_ERROR_IO;
+
+    //释放 Inode
+    release_inode(dentry->inode);
+    dentry->inode = nullptr;
+
+    //移除 Dentry
+    delete_dentry(parent->inode, dentry);
+
+    //同步父目录
+    parent->inode->mtime = time(NULL);
+    sync_inode(parent->inode);
+    
+    return 0;
+}
+
+int FileSystem::fuse_rename(const char* from, const char* to) {
+    bool is_find, is_root;
+    std::string s_from(from);
+    
+    //检查源文件是否存在
+    myfs_dentry* from_dentry = lookup(s_from, &is_find, &is_root);
+    if (!is_find || !from_dentry || !from_dentry->inode) return -MYFS_ERROR_NOTFOUND;
+    
+    //类型一致
+    mode_t mode = MYFS_IS_DIR(from_dentry->inode) ? (S_IFDIR | 0755) : (S_IFREG | 0644);
+    
+    // 在目标位置创建新节点 (借用 fuse_mkdir / fuse_mknod)
+    int ret;
+    if (S_ISDIR(mode)) {
+        ret = fuse_mkdir(to, mode);
+    } else {
+        ret = fuse_mknod(to, mode, 0);
+    }
+    
+    if (ret != 0) return ret;
+
+    //获取刚刚创建的目标 dentry
+    bool to_find, to_root;
+    myfs_dentry* to_dentry = lookup(to, &to_find, &to_root);
+    if (!to_find || !to_dentry || !to_dentry->inode) return -MYFS_ERROR_IO;
+
+    //mknod 刚刚分配了一个新 inode，这个新 inode 是多余的
+    release_inode(to_dentry->inode); // 释放那个临时的空 inode
+    
+    // 将目标 dentry 指向源 inode
+    to_dentry->inode = from_dentry->inode;
+    to_dentry->ino = from_dentry->inode->ino;
+    
+    //更新 inode 的反向指针
+    from_dentry->inode->dentry = to_dentry; 
+    
+    //从旧的父目录中移除源 dentry
+    myfs_dentry* from_parent = from_dentry->parent;
+    delete_dentry(from_parent->inode, from_dentry);
+    
+    //同步受影响的父目录
+    sync_inode(from_parent->inode);       // 源父目录
+    sync_inode(to_dentry->parent->inode); // 目标父目录
+    
     return 0;
 }

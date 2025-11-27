@@ -95,7 +95,7 @@ struct myfs_inode {
 
 //内存中的 Dentry (目录项)
 struct myfs_dentry {
-    std::string fname; // [修改] 使用 std::string 代替 char数组，方便操作
+    std::string fname; 
     uint32_t ino;
     FileType ftype;
 
@@ -184,7 +184,6 @@ struct myfs_inode_d {
 static_assert(sizeof(myfs_inode_d) == 128, "Inode Disk Size Mismatch");
 
 // 磁盘目录项
-// [重要] 这里不能改 string，必须是 POD 类型才能直接写入磁盘
 struct myfs_dentry_d {
     uint32_t ino;
     uint16_t reclen;      // 记录长度

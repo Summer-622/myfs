@@ -13,7 +13,7 @@ static const struct fuse_opt option_spec[] = {
 
 struct CustomOptions myfs_options;
 
-// Wrappers
+// Wrappers (原有)
 void* myfs_init(struct fuse_conn_info * conn_info) {
 	FileSystem::Instance().mount(myfs_options.device);
 	return NULL;
@@ -51,6 +51,34 @@ int myfs_utimens(const char* path, const struct timespec tv[2]) {
     return FileSystem::Instance().fuse_utimens(path, tv);
 }
 
+int myfs_access(const char* path, int mask) {
+    return FileSystem::Instance().fuse_access(path, mask);
+}
+
+int myfs_open(const char* path, struct fuse_file_info* fi) {
+    return FileSystem::Instance().fuse_open(path, fi);
+}
+
+int myfs_opendir(const char* path, struct fuse_file_info* fi) {
+    return FileSystem::Instance().fuse_opendir(path, fi);
+}
+
+int myfs_truncate(const char* path, off_t size) {
+    return FileSystem::Instance().fuse_truncate(path, size);
+}
+
+int myfs_unlink(const char* path) {
+    return FileSystem::Instance().fuse_unlink(path);
+}
+
+int myfs_rmdir(const char* path) {
+    return FileSystem::Instance().fuse_rmdir(path);
+}
+
+int myfs_rename(const char* from, const char* to) {
+    return FileSystem::Instance().fuse_rename(from, to);
+}
+
 // Main
 int main(int argc, char **argv)
 {
@@ -60,10 +88,17 @@ int main(int argc, char **argv)
     operations.mkdir = myfs_mkdir;
     operations.getattr = myfs_getattr;
     operations.readdir = myfs_readdir;
-    operations.mknod = myfs_mknod;   // 注册 mknod
+    operations.mknod = myfs_mknod;   
     operations.write = myfs_write;
-    operations.read = myfs_read;     // 注册 read
-    operations.utimens = myfs_utimens; // 注册 utimens
+    operations.read = myfs_read;     
+    operations.utimens = myfs_utimens; 
+    operations.access = myfs_access;
+    operations.open = myfs_open;
+    operations.opendir = myfs_opendir;
+    operations.truncate = myfs_truncate;
+    operations.unlink = myfs_unlink;
+    operations.rmdir = myfs_rmdir;
+    operations.rename = myfs_rename;
 
     struct fuse_args args = FUSE_ARGS_INIT(argc, argv);
 	myfs_options.device = strdup(""); 
